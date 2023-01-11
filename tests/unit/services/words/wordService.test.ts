@@ -35,7 +35,7 @@ describe('Test getCommonWords', () => {
     expect(scrapeCommonWordsSpy).toBeCalledTimes(1);
     expect(scrapeCommonWordsSpy).toHaveBeenCalledWith(url);
     expect(processCommonWordsSpy).toBeCalledTimes(1);
-    expect(processCommonWordsSpy).toHaveBeenCalledWith(commonWords);
+    expect(processCommonWordsSpy).toHaveBeenCalledWith(commonWords, 0);
     expect(strMapToJsonSpy).toBeCalledTimes(1);
     expect(strMapToJsonSpy).toHaveBeenCalledWith(commonWordsMap);
   })
@@ -64,5 +64,18 @@ describe('Test processCommonWords', () => {
     expect(result.get('com')).toBe(1);
     expect(result.get('test1!')).toBe(undefined);
     expect(result.get('test4')).toBe(undefined);
+  })
+
+  it('should return correct common words map size with limit parameter', async () => {
+    const scrapeService = new PuppeteerScrapeService();
+    const jsonUtil = new JsonUtil();
+    const stringUtil = new StringUtil();
+
+    const wordService = new WordService(scrapeService, jsonUtil, stringUtil);
+    const words = ['test1', 'test2', 'test1', 'test3    test1@    test2', 'test1@mail.com'];
+
+    const result = await wordService.processCommonWords(words, 2);
+
+    expect(result.size).toBe(2);
   })
 })

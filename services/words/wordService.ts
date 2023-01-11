@@ -18,11 +18,12 @@ class WordService {
      * and return them in JSON format.
      * 
      * @param url URL
+     * @param limit Specify limit of the common words
      * @returns JSON string
      */
-    public getCommonWords = async (url: string) => {
+    public getCommonWords = async (url: string, limit: number = 0) => {
         const words = await this.scrapeService.scrapeCommonWords(url);
-        const commonWordsMap = await this.processCommonWords(words);
+        const commonWordsMap = await this.processCommonWords(words, limit);
         return this.jsonUtil.strMapToJson(commonWordsMap)
     }
 
@@ -30,12 +31,13 @@ class WordService {
      * Convert the array of common words into Map object and count the number of each common words.
      * 
      * @param words Array of common words
+     * @param limit Specify limit of the common words
      * @returns Map object containing common word as key and the count as value
      */
-    public processCommonWords = async (words: string[]) => {
+    public processCommonWords = async (words: string[], limit: number = 0) => {
         try {
             const commonWordsMap = new Map();
-    
+
             for (const word of words) {
                 const filteredWord = this.stringUtil.replaceNonAlphaNumChars(word, " ").trim().toLowerCase();
                 const splitWords = filteredWord.split(/(\s+)/);
@@ -46,6 +48,8 @@ class WordService {
                         let count = commonWordsMap.get(commonWord);
                         count = count ? count+1 : 1;
                         commonWordsMap.set(commonWord, count);
+
+                        if (limit > 0 && commonWordsMap.size >= limit) return commonWordsMap;
                     }
                 }
             }

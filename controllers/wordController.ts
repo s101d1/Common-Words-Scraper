@@ -12,12 +12,16 @@ class WordController {
 
     public listWords = async (req: Request, res: Response) => {
         try {
-            const { url } = req.query;
-            if (typeof url !== "string") {
-                throw new Error("Query param 'url' has to be of type string");
+            if (typeof req.query.url === 'undefined') {
+                return res.status(400).json({"error": "url parameter is required"})
             }
 
-            const result = await this.wordService.getCommonWords(url);
+            let limitParam: number = 0;
+            if (typeof req.query.limit !== 'undefined') {
+                limitParam = Number(req.query.limit) || 0;
+            }
+
+            const result = await this.wordService.getCommonWords(req.query.url as string, limitParam);
 
             res.setHeader('Content-Type', 'application/json');
             res.status(200).send(result);
