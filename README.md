@@ -30,7 +30,7 @@ For example, calling API endpoint `GET /words` with https://www.example.com/ url
 
 2) Calling the API endpoint `/words` directly. For example, with curl command:
 
-	$ curl -X GET http://localhost:8080/words?url=http://www.example.com/
+	$ curl -X GET "http://localhost:8080/words?url=http://www.example.com/"
 
 ## How to run the tests
 
