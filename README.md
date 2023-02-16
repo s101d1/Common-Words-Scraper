@@ -1,5 +1,5 @@
 # Common-Word-Checker
-This is a simple Node.js application that allows users to submit a URL, and then returns a list of the most common words found on the page at that URL.
+This is a simple Node.js REST API application that allows users to submit a page URL and then it will scrape words found on the input page URL and calculate the words frequency in the response result.
 
 The application is built with `Express.js` framework and `TypeScript` language, `Jest` framework is used for the testing. The application has an API endpoint `GET /words` that accepts an url query parameter, and returns a JSON object with a list of common words found on the page, along with the number of times each word appears.
 
